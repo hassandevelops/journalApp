@@ -3,6 +3,8 @@ package com.bug2feature.journalApp.Controller;
 import com.bug2feature.journalApp.Entity.User;
 import com.bug2feature.journalApp.Repository.UserRepository;
 import com.bug2feature.journalApp.Service.UserService;
+import com.bug2feature.journalApp.Service.WeatherService;
+import com.bug2feature.journalApp.api.response.WeatherApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +20,8 @@ public class UserController {
     UserService userService;
     @Autowired
     UserRepository userRepository;
-
+    @Autowired
+    WeatherService weatherService;
 
 
 
@@ -43,5 +46,16 @@ public class UserController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         userRepository.deleteByUserName(auth.getName());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("greet")
+    public ResponseEntity<?> greetUser(){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        WeatherApiResponse weatherApiResponse=weatherService.getWeather("Islamabad");
+        String greeting="";
+        if(weatherApiResponse!=null){
+            greeting = "Hi! "+auth.getName()+" weather feels like "+weatherApiResponse.getCurrent().getFeelslikeC();
+        }
+        return new ResponseEntity<>(greeting,HttpStatus.OK);
     }
 }

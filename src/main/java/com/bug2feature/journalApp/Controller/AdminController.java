@@ -3,6 +3,7 @@ package com.bug2feature.journalApp.Controller;
 import com.bug2feature.journalApp.Entity.JournalEntry;
 import com.bug2feature.journalApp.Entity.User;
 import com.bug2feature.journalApp.Service.UserService;
+import com.bug2feature.journalApp.cache.AppCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,8 @@ public class AdminController {
 
     @Autowired
     UserService userService;
+    @Autowired
+    AppCache appCache;
 
     @GetMapping("/all-users")
     ResponseEntity<?> getAllUsers(){
@@ -33,5 +36,10 @@ public class AdminController {
     ResponseEntity<?> createAdmin(@RequestBody User user){
             userService.saveAdmin(user);
             return new ResponseEntity<>(user, HttpStatus.CREATED);
+    }
+
+    @GetMapping("clear-app-cache")
+    public void clearAppCache(){
+        appCache.init();
     }
 }

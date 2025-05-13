@@ -22,9 +22,11 @@ public class User {
     private String userName;
     @NonNull
     private String password;
+    private String email;
+    private boolean sentimentAnalysis;
 
     @DBRef
-    List<JournalEntry> journalEntries = new ArrayList<>();
-    List<String> roles;
+    private List<JournalEntry> journalEntries = new ArrayList<>();
+    private List<String> roles;
 
 }
